@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "164729872401",
+    "firebase_url": "https://manga-tracker-94e88.firebaseio.com",
+    "project_id": "manga-tracker-94e88",
+    "storage_bucket": "manga-tracker-94e88.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:164729872401:android:1a2c3a5fe4469012e291b0",
+        "android_client_info": {
+          "package_name": "com.example.manga_tracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "164729872401-3cirolgpfk38gi7m06s4oquuhg3al4eu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6YOdYRZMkDmd9xGbyxBF6YW1nxidLgio"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "164729872401-3cirolgpfk38gi7m06s4oquuhg3al4eu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
