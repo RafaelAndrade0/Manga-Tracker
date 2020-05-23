@@ -3,6 +3,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:manga_tracker/models/manga.dart';
+import 'package:manga_tracker/screens/manga_details/characters.dart';
+import 'package:manga_tracker/screens/manga_details/dialog_status.dart';
+import 'package:manga_tracker/screens/manga_details/header.dart';
 import 'package:manga_tracker/shared/scaffold.dart';
 
 class MangaDetails extends StatefulWidget {
@@ -39,169 +42,25 @@ class _MangaDetailsState extends State<MangaDetails> {
 
   @override
   Widget build(BuildContext context) {
+    _showStatusMangaDialog() {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return DialogStatus();
+          });
+    }
+
     return DefaultScaffold(
       title: widget.mangaDetails.title,
-      // actions: <Widget>[
-      //   IconButton(
-      //     icon: isFavorite ? Icon(Icons.favorite) : Icon(Icons.favorite_border),
-      //     onPressed: () => setState(() => isFavorite = !isFavorite),
-      //   ),
-      // ],
       body: ListView(
         children: <Widget>[
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Container(
-                height: 250.0,
-                width: double.maxFinite,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    bottomRight: Radius.elliptical(40, 40),
-                  ),
-                  image: DecorationImage(
-                    image: NetworkImage(
-                      widget.mangaDetails.url,
-                    ),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.7),
-                    borderRadius: BorderRadius.only(
-                      bottomRight: Radius.elliptical(40, 40),
-                    ),
-                  ),
-                  padding: const EdgeInsets.symmetric(vertical: 5.0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Expanded(
-                        flex: 2,
-                        child: Image.network(
-                          widget.mangaDetails.url,
-                          height: 200,
-                          fit: BoxFit.fitHeight,
-                        ),
-                      ),
-                      Expanded(
-                        flex: 3,
-                        child: Padding(
-                          padding:
-                              const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                widget.mangaDetails.title,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 30.0,
-                                ),
-                              ),
-                              const Padding(
-                                padding: EdgeInsets.symmetric(
-                                  vertical: 2.0,
-                                ),
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Text(
-                                    'Author',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 15.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 5.0),
-                                    child: Text(
-                                      'Masashi Kishimoto',
-                                      style: const TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 15.0,
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Text(
-                                    'Artist',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 15.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 5.0),
-                                    child: Text(
-                                      'Masashi Kishimoto',
-                                      style: const TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 15.0,
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Text(
-                                    'Most Recent Chapter',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 15.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 5.0),
-                                    child: Text(
-                                      '920',
-                                      style: const TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 15.0,
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Text(
-                                    'Status',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 15.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 5.0),
-                                    child: Text(
-                                      'Completed',
-                                      style: const TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 15.0,
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+              Header(
+                title: widget.mangaDetails.title,
+                url: widget.mangaDetails.url,
+                showStatusMangaDialog: _showStatusMangaDialog,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -236,7 +95,6 @@ class _MangaDetailsState extends State<MangaDetails> {
               Container(
                 margin: EdgeInsets.symmetric(
                   horizontal: 15.0,
-                  vertical: 8.0,
                 ),
                 child: Text(
                   'About',
@@ -286,57 +144,7 @@ class _MangaDetailsState extends State<MangaDetails> {
                   ),
                 ),
               ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(maxHeight: 80),
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 5.0),
-                        child: CircleAvatar(
-                          maxRadius: 40.0,
-                          backgroundImage: NetworkImage(
-                              'https://avatarfiles.alphacoders.com/629/62922.jpg'),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 5.0),
-                        child: CircleAvatar(
-                          maxRadius: 40.0,
-                          backgroundImage: NetworkImage(
-                              'https://avatarfiles.alphacoders.com/618/61857.jpg'),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 5.0),
-                        child: CircleAvatar(
-                          maxRadius: 40.0,
-                          backgroundImage: NetworkImage(
-                              'https://avatarfiles.alphacoders.com/837/83722.jpg'),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 5.0),
-                        child: CircleAvatar(
-                          maxRadius: 40.0,
-                          backgroundImage: NetworkImage(
-                              'https://avatarfiles.alphacoders.com/783/78320.jpg'),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 5.0),
-                        child: CircleAvatar(
-                          maxRadius: 40.0,
-                          backgroundImage: NetworkImage(
-                              'https://avatarfiles.alphacoders.com/102/102646.jpg'),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              Characters(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
@@ -350,13 +158,6 @@ class _MangaDetailsState extends State<MangaDetails> {
           )
         ],
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {},
-      //   child: Icon(
-      //     Icons.add,
-      //   ),
-      //   backgroundColor: Colors.orangeAccent,
-      // ),
     );
   }
 }
