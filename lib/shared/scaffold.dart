@@ -3,14 +3,17 @@ import 'package:flutter/material.dart';
 class DefaultScaffold extends StatelessWidget {
   final String title;
   final Widget body;
+  final Widget floatingActionButton;
   final List<Widget> actions;
   final BottomNavigationBar bottomNavigationBar;
 
-  DefaultScaffold(
-      {@required this.title,
-      @required this.body,
-      this.actions,
-      this.bottomNavigationBar});
+  DefaultScaffold({
+    @required this.title,
+    @required this.body,
+    this.actions,
+    this.bottomNavigationBar,
+    this.floatingActionButton,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +26,7 @@ class DefaultScaffold extends StatelessWidget {
       ),
       body: body,
       bottomNavigationBar: bottomNavigationBar,
+      floatingActionButton: floatingActionButton,
     );
   }
 }

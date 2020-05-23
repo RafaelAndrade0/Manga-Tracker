@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:manga_tracker/models/manga.dart';
 import 'package:manga_tracker/shared/scaffold.dart';
 
@@ -56,7 +57,7 @@ class _MangaDetailsState extends State<MangaDetails> {
                 width: double.maxFinite,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.elliptical(40, 40),
+                    bottomRight: Radius.elliptical(40, 40),
                   ),
                   image: DecorationImage(
                     image: NetworkImage(
@@ -69,7 +70,7 @@ class _MangaDetailsState extends State<MangaDetails> {
                   decoration: BoxDecoration(
                     color: Colors.black.withOpacity(0.7),
                     borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.elliptical(40, 40),
+                      bottomRight: Radius.elliptical(40, 40),
                     ),
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 5.0),
@@ -205,8 +206,13 @@ class _MangaDetailsState extends State<MangaDetails> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
+                    IconButton(
+                      icon: Icon(Icons.share),
+                      tooltip: 'Share',
+                      onPressed: () {},
+                    ),
                     OutlineButton.icon(
                       onPressed: () {
                         setState(() => isFavorite = !isFavorite);
@@ -224,16 +230,6 @@ class _MangaDetailsState extends State<MangaDetails> {
                         ),
                       ),
                     ),
-                    IconButton(
-                      icon: Icon(Icons.share),
-                      tooltip: 'Share',
-                      onPressed: () {},
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.gamepad),
-                      tooltip: 'Share',
-                      onPressed: () {},
-                    )
                   ],
                 ),
               ),
@@ -246,6 +242,7 @@ class _MangaDetailsState extends State<MangaDetails> {
                   'About',
                   style: TextStyle(
                     fontSize: 16.0,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
@@ -285,40 +282,59 @@ class _MangaDetailsState extends State<MangaDetails> {
                   'Characters',
                   style: TextStyle(
                     fontSize: 16.0,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-              ConstrainedBox(
-                constraints: BoxConstraints(minHeight: 80, maxHeight: 100),
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: <Widget>[
-                    CircleAvatar(
-                      maxRadius: 50.0,
-                      backgroundImage: NetworkImage(
-                          'https://avatarfiles.alphacoders.com/629/62922.jpg'),
-                    ),
-                    CircleAvatar(
-                      maxRadius: 50.0,
-                      backgroundImage: NetworkImage(
-                          'https://avatarfiles.alphacoders.com/618/61857.jpg'),
-                    ),
-                    CircleAvatar(
-                      maxRadius: 50.0,
-                      backgroundImage: NetworkImage(
-                          'https://avatarfiles.alphacoders.com/837/83722.jpg'),
-                    ),
-                    CircleAvatar(
-                      maxRadius: 50.0,
-                      backgroundImage: NetworkImage(
-                          'https://avatarfiles.alphacoders.com/783/78320.jpg'),
-                    ),
-                    CircleAvatar(
-                      maxRadius: 50.0,
-                      backgroundImage: NetworkImage(
-                          'https://avatarfiles.alphacoders.com/102/102646.jpg'),
-                    ),
-                  ],
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxHeight: 80),
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 5.0),
+                        child: CircleAvatar(
+                          maxRadius: 40.0,
+                          backgroundImage: NetworkImage(
+                              'https://avatarfiles.alphacoders.com/629/62922.jpg'),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 5.0),
+                        child: CircleAvatar(
+                          maxRadius: 40.0,
+                          backgroundImage: NetworkImage(
+                              'https://avatarfiles.alphacoders.com/618/61857.jpg'),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 5.0),
+                        child: CircleAvatar(
+                          maxRadius: 40.0,
+                          backgroundImage: NetworkImage(
+                              'https://avatarfiles.alphacoders.com/837/83722.jpg'),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 5.0),
+                        child: CircleAvatar(
+                          maxRadius: 40.0,
+                          backgroundImage: NetworkImage(
+                              'https://avatarfiles.alphacoders.com/783/78320.jpg'),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 5.0),
+                        child: CircleAvatar(
+                          maxRadius: 40.0,
+                          backgroundImage: NetworkImage(
+                              'https://avatarfiles.alphacoders.com/102/102646.jpg'),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Row(
@@ -334,6 +350,13 @@ class _MangaDetailsState extends State<MangaDetails> {
           )
         ],
       ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {},
+      //   child: Icon(
+      //     Icons.add,
+      //   ),
+      //   backgroundColor: Colors.orangeAccent,
+      // ),
     );
   }
 }
