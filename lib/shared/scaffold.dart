@@ -6,6 +6,7 @@ class DefaultScaffold extends StatelessWidget {
   final Widget floatingActionButton;
   final List<Widget> actions;
   final BottomNavigationBar bottomNavigationBar;
+  // final Function onItemTapped;
 
   DefaultScaffold({
     @required this.title,
@@ -17,6 +18,12 @@ class DefaultScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // onItemTapped(int index) {
+    //   print(index);
+    // }
+
+    // int _selectedIndex = 0;
+
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
@@ -26,6 +33,30 @@ class DefaultScaffold extends StatelessWidget {
       ),
       body: body,
       bottomNavigationBar: bottomNavigationBar,
+      // bottomNavigationBar: BottomNavigationBar(
+      //   type: BottomNavigationBarType.fixed,
+      //   items: const <BottomNavigationBarItem>[
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.home),
+      //       title: Text('Home'),
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.search),
+      //       title: Text('Search'),
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.favorite),
+      //       title: Text('Favorites'),
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.settings),
+      //       title: Text('Settings'),
+      //     ),
+      //   ],
+      //   currentIndex: _selectedIndex,
+      //   selectedItemColor: Colors.amber[800],
+      //   onTap: onItemTapped,
+      // ),
       floatingActionButton: floatingActionButton,
     );
   }

@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:manga_tracker/screens/authenticate/authenticate.dart';
-import 'package:manga_tracker/screens/authenticate/login.dart';
+import 'package:manga_tracker/screens/home/home.dart';
 import 'package:manga_tracker/screens/wrapper.dart';
 import 'package:manga_tracker/services/auth.dart';
 import 'package:provider/provider.dart';
