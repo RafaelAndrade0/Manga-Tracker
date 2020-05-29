@@ -41,7 +41,7 @@ class _WrapperState extends State<Wrapper> {
         user == null
             ? FlatButton.icon(
                 onPressed: () async {
-                  Navigator.pushReplacement(
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => Login(),

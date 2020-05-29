@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:manga_tracker/screens/authenticate/register.dart';
 import 'package:manga_tracker/screens/wrapper.dart';
 import 'package:manga_tracker/services/auth.dart';
 import 'package:manga_tracker/shared/constants.dart';
@@ -27,7 +28,12 @@ class _LoginState extends State<Login> {
             title: 'Login',
             actions: <Widget>[
               FlatButton.icon(
-                onPressed: () => widget.toggleLoginView(),
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Register(),
+                  ),
+                ),
                 icon: Icon(
                   Icons.people,
                   color: Colors.white,

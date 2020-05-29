@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:manga_tracker/screens/wrapper.dart';
 import 'package:manga_tracker/services/auth.dart';
 import 'package:manga_tracker/shared/constants.dart';
 import 'package:manga_tracker/shared/loading.dart';
@@ -84,6 +85,13 @@ class _RegisterState extends State<Register> {
                               isLoading = false;
                             });
                           }
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Wrapper(),
+                            ),
+                            (Route<dynamic> route) => false,
+                          );
                         }
                       },
                       child: Text(
