@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:manga_tracker/models/manga.dart';
 import 'package:manga_tracker/screens/home/manga_item.dart';
 import 'package:manga_tracker/services/database.dart';
+import 'package:shimmer/shimmer.dart';
 
 class MangaList extends StatelessWidget {
   final String title;
@@ -15,9 +15,23 @@ class MangaList extends StatelessWidget {
         stream: DatabaseService().mangas,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return SpinKitRotatingCircle(
-              color: Colors.orangeAccent,
-              size: 50.0,
+            // return SpinKitRotatingCircle(
+            //   color: Colors.orangeAccent,
+            //   size: 50.0,
+            // );
+            return Container(
+              height: 200.0,
+              child: Shimmer.fromColors(
+                baseColor: Colors.grey[400],
+                highlightColor: Colors.white,
+                child: Column(
+                  children: <Widget>[
+                    MangaItem(
+                      mangaData: MangaData(title: 'Teste'),
+                    ),
+                  ],
+                ),
+              ),
             );
           }
 

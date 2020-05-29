@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:manga_tracker/screens/wrapper.dart';
 import 'package:manga_tracker/services/auth.dart';
 import 'package:manga_tracker/shared/constants.dart';
 import 'package:manga_tracker/shared/loading.dart';
@@ -75,6 +76,12 @@ class _LoginState extends State<Login> {
                           var result = await AuthService()
                               .signInWithEmailAndPassword(
                                   email: email, password: password);
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Wrapper(),
+                              ),
+                              (Route<dynamic> route) => false);
                           if (result == null) {
                             setState(() => isLoading = false);
                           }
