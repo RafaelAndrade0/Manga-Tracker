@@ -3,13 +3,16 @@ import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:manga_tracker/models/manga.dart';
+import 'package:manga_tracker/models/user.dart';
 import 'package:manga_tracker/screens/authenticate/login.dart';
 import 'package:manga_tracker/screens/manga_details/characters.dart';
 import 'package:manga_tracker/screens/manga_details/dialog_status.dart';
 import 'package:manga_tracker/screens/manga_details/header.dart';
-import 'package:manga_tracker/services/auth.dart';
+import 'package:manga_tracker/services/database.dart';
 import 'package:manga_tracker/shared/scaffold.dart';
+import 'package:provider/provider.dart';
 
 class MangaDetails extends StatefulWidget {
   final MangaData mangaDetails;
@@ -25,15 +28,10 @@ class _MangaDetailsState extends State<MangaDetails> {
   String firstHalfDescription = '';
   String secondHalfDescription = '';
 
-  String favoriteMessage() {
-    return isFavorite ? 'Favorite' : "Add to favorites";
-  }
-
   @override
   void initState() {
     if (widget.mangaDetails.description.length > 200) {
       firstHalfDescription = widget.mangaDetails.description.substring(0, 200);
-      print(firstHalfDescription);
       secondHalfDescription = widget.mangaDetails.description
           .substring(200, widget.mangaDetails.description.length);
     } else {
@@ -45,6 +43,8 @@ class _MangaDetailsState extends State<MangaDetails> {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<FirebaseUser>(context);
+
     _showStatusMangaDialog() {
       showDialog(
           context: context,
@@ -53,9 +53,27 @@ class _MangaDetailsState extends State<MangaDetails> {
           });
     }
 
-    return StreamBuilder<FirebaseUser>(
-        stream: AuthService().user,
+    bool favorite(List<String> favorites) {
+      return favorites?.contains(widget.mangaDetails.id);
+    }
+
+    String favoriteMessage(List<String> favorites) {
+      return favorite(favorites) ? 'Favorite' : "Add to favorites";
+    }
+
+    return StreamBuilder<UserData>(
+        stream: DatabaseService(uid: user.uid).userData,
         builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Container(
+              color: Colors.grey[200],
+              child: SpinKitChasingDots(
+                color: Colors.orangeAccent,
+                size: 50.0,
+              ),
+            );
+          }
+
           return DefaultScaffold(
             title: widget.mangaDetails.title,
             body: Builder(
@@ -81,7 +99,7 @@ class _MangaDetailsState extends State<MangaDetails> {
                             ),
                             OutlineButton.icon(
                               onPressed: () {
-                                if (snapshot.data == null) {
+                                if (snapshot.data.uid == null) {
                                   final snackBar = SnackBar(
                                     content: Text('You need to be logged in!'),
                                     action: SnackBarAction(
@@ -97,20 +115,33 @@ class _MangaDetailsState extends State<MangaDetails> {
                                     ),
                                   );
                                   Scaffold.of(context).showSnackBar(snackBar);
-                                  print('Sem usuario logado');
                                 } else {
-                                  print('Usuario Logado!');
-                                  setState(() => isFavorite = !isFavorite);
+                                  if (favorite(snapshot.data.favoriteMangas)) {
+                                    var newListFavorites =
+                                        snapshot.data.favoriteMangas;
+                                    newListFavorites
+                                        .remove(widget.mangaDetails.id);
+                                    DatabaseService(uid: user.uid)
+                                        .updateUserData(
+                                            favorites: newListFavorites);
+                                  } else {
+                                    DatabaseService(uid: user.uid)
+                                        .updateUserData(favorites: [
+                                      ...snapshot.data.favoriteMangas,
+                                      widget.mangaDetails.id
+                                    ]);
+                                  }
                                 }
                               },
-                              icon: isFavorite
+                              icon: favorite(snapshot.data.favoriteMangas)
                                   ? Icon(
                                       Icons.favorite,
                                       color: Colors.red,
                                     )
                                   : Icon(Icons.favorite_border),
                               label: Text(
-                                favoriteMessage(),
+                                // 'Add to Favorites',
+                                favoriteMessage(snapshot.data.favoriteMangas),
                                 style: TextStyle(
                                   fontWeight: FontWeight.w900,
                                 ),

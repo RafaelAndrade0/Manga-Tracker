@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:manga_tracker/models/manga.dart';
+import 'package:manga_tracker/models/user.dart';
 
 class DatabaseService {
   final String uid;
@@ -10,6 +11,7 @@ class DatabaseService {
       Firestore.instance.collection('mangas');
   final CollectionReference userCollection =
       Firestore.instance.collection('users');
+  List<String> favorites = [];
 
   Stream<List<MangaData>> get mangas {
     return mangaCollection
@@ -27,11 +29,30 @@ class DatabaseService {
     return mangaCollection.snapshots().map((event) => event);
   }
 
+  UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
+    this.favorites = List.from(snapshot.data['favorites']);
+    return UserData(
+      uid: snapshot.documentID,
+      favoriteMangas: List.from(snapshot.data['favorites']),
+    );
+  }
+
+  bool isFavorite(String id) {
+    return favorites.contains(id);
+  }
+
+  Stream<UserData> get userData {
+    return userCollection
+        .document(uid)
+        .snapshots()
+        .map((snapshot) => _userDataFromSnapshot(snapshot));
+  }
+
   List<MangaData> _mangaListFromSnapshots(QuerySnapshot snapshot) {
-    print(snapshot.documents.last.data['favorites']);
     return snapshot.documents
         .map(
           (manga) => MangaData(
+            id: manga.data['id'] ?? '',
             title: manga.data['title'] ?? '',
             description: manga.data['description'] ?? '',
             url: manga.data['url'] ?? '',
