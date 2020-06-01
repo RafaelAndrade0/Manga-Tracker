@@ -62,9 +62,9 @@ class _MangaDetailsState extends State<MangaDetails> {
     }
 
     return StreamBuilder<UserData>(
-        stream: DatabaseService(uid: user.uid).userData,
+        stream: DatabaseService(uid: user?.uid).userData,
         builder: (context, snapshot) {
-          if (!snapshot.hasData) {
+          if (!snapshot.hasData && user != null) {
             return Container(
               color: Colors.grey[200],
               child: SpinKitChasingDots(
@@ -97,56 +97,84 @@ class _MangaDetailsState extends State<MangaDetails> {
                               tooltip: 'Share',
                               onPressed: () {},
                             ),
-                            OutlineButton.icon(
-                              onPressed: () {
-                                if (snapshot.data.uid == null) {
-                                  final snackBar = SnackBar(
-                                    content: Text('You need to be logged in!'),
-                                    action: SnackBarAction(
-                                      label: 'Login',
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => Login(),
+                            snapshot.data != null
+                                ? OutlineButton.icon(
+                                    onPressed: () {
+                                      if (snapshot.data.uid == null) {
+                                        final snackBar = SnackBar(
+                                          content:
+                                              Text('You need to be logged in!'),
+                                          action: SnackBarAction(
+                                            label: 'Login',
+                                            onPressed: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) => Login(),
+                                                ),
+                                              );
+                                            },
                                           ),
                                         );
-                                      },
+                                        Scaffold.of(context)
+                                            .showSnackBar(snackBar);
+                                      } else {
+                                        if (favorite(
+                                            snapshot.data.favoriteMangas)) {
+                                          var newListFavorites =
+                                              snapshot.data.favoriteMangas;
+                                          newListFavorites
+                                              .remove(widget.mangaDetails.id);
+                                          DatabaseService(uid: user.uid)
+                                              .updateUserData(
+                                                  favorites: newListFavorites);
+                                        } else {
+                                          DatabaseService(uid: user.uid)
+                                              .updateUserData(favorites: [
+                                            ...snapshot.data.favoriteMangas,
+                                            widget.mangaDetails.id
+                                          ]);
+                                        }
+                                      }
+                                    },
+                                    icon: favorite(snapshot.data.favoriteMangas)
+                                        ? Icon(
+                                            Icons.favorite,
+                                            color: Colors.red,
+                                          )
+                                        : Icon(Icons.favorite_border),
+                                    label: Text(
+                                      // 'Add to Favorites',
+                                      favoriteMessage(
+                                          snapshot.data.favoriteMangas),
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w900,
+                                      ),
                                     ),
-                                  );
-                                  Scaffold.of(context).showSnackBar(snackBar);
-                                } else {
-                                  if (favorite(snapshot.data.favoriteMangas)) {
-                                    var newListFavorites =
-                                        snapshot.data.favoriteMangas;
-                                    newListFavorites
-                                        .remove(widget.mangaDetails.id);
-                                    DatabaseService(uid: user.uid)
-                                        .updateUserData(
-                                            favorites: newListFavorites);
-                                  } else {
-                                    DatabaseService(uid: user.uid)
-                                        .updateUserData(favorites: [
-                                      ...snapshot.data.favoriteMangas,
-                                      widget.mangaDetails.id
-                                    ]);
-                                  }
-                                }
-                              },
-                              icon: favorite(snapshot.data.favoriteMangas)
-                                  ? Icon(
-                                      Icons.favorite,
-                                      color: Colors.red,
-                                    )
-                                  : Icon(Icons.favorite_border),
-                              label: Text(
-                                // 'Add to Favorites',
-                                favoriteMessage(snapshot.data.favoriteMangas),
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w900,
-                                ),
-                              ),
-                            ),
+                                  )
+                                : OutlineButton.icon(
+                                    onPressed: () {
+                                      final snackBar = SnackBar(
+                                        content:
+                                            Text('You need to be logged in!'),
+                                        action: SnackBarAction(
+                                          label: 'Login',
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => Login(),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      );
+                                      Scaffold.of(context)
+                                          .showSnackBar(snackBar);
+                                    },
+                                    icon: Icon(Icons.favorite_border),
+                                    label: Text('Add to favorites'),
+                                  ),
                           ],
                         ),
                       ),
